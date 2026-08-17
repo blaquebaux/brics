@@ -29,7 +29,7 @@ ETFs, South Africa, and the BRICS+ additions (UAE, Saudi) where accessible.** Th
 whether a *curated tradable-BRICS* basket earns its keep over just holding broad EM (EEM/VWO) — and
 whether it adds anything the three regional sleeves do not already capture.
 
-## Research plan (Path A — not yet built)
+## Research plan (Path A)
 
 - **The tradable universe.** Build the investable BRICS/BRICS+ set explicitly — ADRs + country ETFs
   with real liquidity — and document what is excluded and why (Russia: untradable; onshore A-shares:
@@ -42,11 +42,32 @@ whether it adds anything the three regional sleeves do not already capture.
 - **Currency and risk overlay.** EM returns are half FX. Measure the USD/EM-FX exposure and test
   whether hedging or curve-aware sizing improves the risk-adjusted result.
 
-Nothing above is implemented or validated. This is the map, not the territory.
+## Research — first pass done
+
+Full detail in [`research/README.md`](research/README.md). The scorecard (Alpaca SIP, 2016–2026):
+
+| # | Question | Verdict |
+|---|----------|---------|
+| 1 | What is actually tradable? | ✅ **Russia dead** (RSX last bar 2022-12-13, ERUS 2022-03-03); 7 liquid country ETFs remain |
+| 2 | Does "best of group" beat broad EM? | ❌ **momentum-picking fails** — top-3 mom +0.36 Sharpe < equal-weight +0.58 ≈ EEM +0.55 |
+| 3 | Additive, or just EM beta? | ⚠️ 0.90 corr / 0.77 beta to EEM (mostly EM beta) — but **3.2 eff-bets/7**; the Gulf is the diversifier |
+| 4 | Can you dodge the dollar drag? | ⚠️ beta −0.66 to USD; overlay de-risks (vol 18→11%, DD −38→−20%) but adds no Sharpe |
+
+**The synthesis:** a qualified, mostly-deflating result with one genuine keeper idea. "BRICS" isn't an
+investable bloc — **Russia literally stopped trading in 2022** — so a US book holds 6–7 country ETFs.
+The user's question, *"view only the best,"* was right to ask, and the honest answer is **not by
+momentum**: best-of-group rotation (+0.36) underperforms both equal-weight (+0.58) and just buying
+broad EM (+0.55), and the curated basket only *ties* EEM because it's **0.90 correlated** to it. The
+one genuinely additive, non-obvious piece is structural — **the Gulf pocket (KSA/UAE/QAT)**, only 0.58
+correlated to the BRIC-4 equities and far calmer, which lifts the basket to 3.2 effective bets. "The
+best of the BRICs" is EM beta you already own; the Gulf is a low-vol EM *diversifier*. The dollar is a
+structural headwind you can de-risk but not cheaply hedge (echoing
+[EMEA](https://github.com/blaquebaux/emea)/[APAC](https://github.com/blaquebaux/apac)/[LATAM](https://github.com/blaquebaux/latam)).
 
 ## Status
-**Concept.** Thesis and research plan only — no sketches run, no driver, nothing validated to the
-spine's bar. A growth-engine cross-section, gated hard on what is actually tradable.
+**Research: first pass complete — qualified** (`research/`). "Best of BRICS" via momentum is rejected;
+the curated basket is ~0.9 EM beta; the single additive finding is the Gulf (KSA/UAE/QAT) low-correlation
+pocket. No standalone keeper, no live driver; nothing validated to the spine's bar.
 
 ## About Blaque Baux
 
@@ -68,7 +89,7 @@ base/blueprint and holds the [full family roster](https://github.com/blaquebaux/
 ## Layout
 ```
 engine/     the Blaque Baux platform (git submodule -> blaquebaux/base)
-research/   the research plan (Path A) — sketches land here once run
+research/   four Path-A sketches (universe, cross-section, redundancy, currency) + scorecard
 live/       governed live drivers (once a sleeve graduates to paper A/B)
 ```
 
