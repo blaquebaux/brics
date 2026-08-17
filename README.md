@@ -94,14 +94,34 @@ low correlation to the family's dominant US-equity exposure, not return.
 > IEX feed only reaches ~2021, which understated a full-cycle diversifier). The *driver* uses the
 > default (recent) feed since it only needs current prices for an equal-weight book.
 
-> **No bonds overlay.** The family's bonds-regime overlay keys off the US *stock-bond* correlation —
-> the wrong signal for a low-US-beta Gulf book. Brics' own research (#4) found the **dollar regime** is
-> its relevant macro (basket beta −0.66 to UUP); a dollar-regime overlay is the natural future addition.
+### Dollar-regime overlay — the *right* signal, wired & published (ON by default)
+
+brics does **not** use the family's bonds (stock-bond) overlay — that's the wrong signal for a
+low-US-beta Gulf book. Its relevant macro is the **dollar** (research #4: basket beta **−0.66** to
+UUP), so the driver runs a **dollar-regime overlay**: when the dollar is trending up (UUP above its
+100-day average — an EM headwind) it **de-risks the Gulf gross ×0.5**; otherwise full. brics also
+**publishes** the regime to `~/.config/blaquebaux/dollar_regime.txt`, so other USD/international sleeves
+(`apac`, `emea`, `latam`) can size on it — brics is to the *dollar* regime what
+[bonds](https://github.com/blaquebaux/bonds) is to the stock-bond regime.
+
+**Validated** ([`live/brics_dollar_validation.jl`](live/brics_dollar_validation.jl)) — causal
+walk-forward, full 2016–2026 SIP history, net of cost:
+
+| book | Sharpe | CAGR | vol | maxDD |
+|------|--------|------|-----|-------|
+| FULL (always full gross) | +0.48 | 6.3% | 15.1% | −35% |
+| **overlay ×0.5 (dollar up → de-risk)** | **+0.51** | 4.6% | 9.6% | **−20%** |
+
+Sharpe *improves* (+0.48→+0.51) while the drawdown is cut **43%** (−35%→−20%), de-risking 65% of the
+time. This is the methodology working as intended: the bonds overlay was correctly *rejected* for brics
+and the dollar overlay *earns its place* — match the signal to the sleeve. Toggle `BB_DOLLAR_OVERLAY=0`,
+tune `BB_DOLLAR_DERISK`.
 
 ## Status
-**Research complete + live driver built — validation PASS (as a diversifier).** The Gulf pocket is a
-genuine low-correlation, low-vol EM diversifier (the research keeper); "best of BRICS" (momentum) and
-the full basket (EM beta) were rejected. A diversifier, **not** a standalone market-beater. Paper/dry-run;
+**Research complete + live driver built — validation PASS (diversifier) + dollar-regime overlay wired,
+published, and validated (ON by default).** The Gulf pocket is a genuine low-correlation, low-vol EM
+diversifier; "best of BRICS" (momentum) and the full basket (EM beta) were rejected; the dollar overlay
+cuts its drawdown 43% for a better Sharpe. A diversifier, **not** a standalone market-beater. Paper/dry-run;
 nothing validated to the spine's bar, no real capital.
 
 ## About Blaque Baux
@@ -125,7 +145,7 @@ base/blueprint and holds the [full family roster](https://github.com/blaquebaux/
 ```
 engine/     the Blaque Baux platform (git submodule -> blaquebaux/base)
 research/   four Path-A sketches (universe, cross-section, redundancy, currency) + scorecard
-live/       brics_live.jl (Gulf EM diversifier) + brics_validation.jl + wrapper + plist
+live/       brics_live.jl (Gulf diversifier + dollar-regime overlay & emitter) + brics_validation.jl + brics_dollar_validation.jl + wrapper + plist
 ```
 
 ## License
