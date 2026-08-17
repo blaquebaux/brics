@@ -64,10 +64,45 @@ best of the BRICs" is EM beta you already own; the Gulf is a low-vol EM *diversi
 structural headwind you can de-risk but not cheaply hedge (echoing
 [EMEA](https://github.com/blaquebaux/emea)/[APAC](https://github.com/blaquebaux/apac)/[LATAM](https://github.com/blaquebaux/latam)).
 
+## Live driver — built (paper/dry-run)
+
+The research keeper — *the Gulf pocket as a low-correlation EM diversifier* — is now a governed driver
+on the engine ([`live/brics_live.jl`](live/brics_live.jl)): an equal-weight book of **KSA / UAE / QAT**,
+~1× gross, monthly rebalance, through the same Layer-3 safety gate, ledger, reconcile, kill switch and
+HWM as the spine. "Best of BRICS" (momentum) and the full basket (EM beta) were rejected in research;
+this trades only what survived. It is a **diversifier, not a market-beater**.
+
+```bash
+BB_DRYRUN=1 bash live/run_brics_daily.sh            # prints the Gulf book, places nothing
+julia --project=engine live/brics_validation.jl     # the diversifier bar (full SIP history)
+```
+
+**Validation — PASS (as a diversifier).** The honest bar for a diversifier is *low correlation*, not a
+Sharpe race. Causal walk-forward, net of cost, full 2016–2026 SIP history:
+
+| book | Sharpe | CAGR | vol | maxDD | corr-SPY |
+|------|--------|------|-----|-------|----------|
+| **GULF (KSA/UAE/QAT)** | +0.46 | 5.9% | 15.0% | −35% | **+0.56** |
+| broad EM (EEM) | +0.50 | 8.5% | 20.7% | −40% | +0.74 |
+| SPY | +0.89 | 15.1% | 16.7% | −34% | +1.00 |
+
+All four checks pass: low correlation to SPY (0.56), positive standalone Sharpe (+0.46), a **better
+diversifier than broad EM** (0.56 vs 0.74 US-correlation), and calmer (15.0% vs 20.7% vol). Its job is
+low correlation to the family's dominant US-equity exposure, not return.
+
+> **Data note:** the validation uses `feed=sip` for the full 2016–2026 history (the engine's default
+> IEX feed only reaches ~2021, which understated a full-cycle diversifier). The *driver* uses the
+> default (recent) feed since it only needs current prices for an equal-weight book.
+
+> **No bonds overlay.** The family's bonds-regime overlay keys off the US *stock-bond* correlation —
+> the wrong signal for a low-US-beta Gulf book. Brics' own research (#4) found the **dollar regime** is
+> its relevant macro (basket beta −0.66 to UUP); a dollar-regime overlay is the natural future addition.
+
 ## Status
-**Research: first pass complete — qualified** (`research/`). "Best of BRICS" via momentum is rejected;
-the curated basket is ~0.9 EM beta; the single additive finding is the Gulf (KSA/UAE/QAT) low-correlation
-pocket. No standalone keeper, no live driver; nothing validated to the spine's bar.
+**Research complete + live driver built — validation PASS (as a diversifier).** The Gulf pocket is a
+genuine low-correlation, low-vol EM diversifier (the research keeper); "best of BRICS" (momentum) and
+the full basket (EM beta) were rejected. A diversifier, **not** a standalone market-beater. Paper/dry-run;
+nothing validated to the spine's bar, no real capital.
 
 ## About Blaque Baux
 
@@ -90,7 +125,7 @@ base/blueprint and holds the [full family roster](https://github.com/blaquebaux/
 ```
 engine/     the Blaque Baux platform (git submodule -> blaquebaux/base)
 research/   four Path-A sketches (universe, cross-section, redundancy, currency) + scorecard
-live/       governed live drivers (once a sleeve graduates to paper A/B)
+live/       brics_live.jl (Gulf EM diversifier) + brics_validation.jl + wrapper + plist
 ```
 
 ## License
